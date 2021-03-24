@@ -1,0 +1,30 @@
+# action.yml
+name: 'docker-base-image-auto-rebuild-on-dependency-update'
+description: 'Rebuild docker base image only when dependencies are updated.'
+inputs:
+  GH_USERNAME:
+    description: 'Github Username'
+    required: true
+  GH_PERSONAL_ACCESS_TOKEN:
+    description: 'Github Personal Access Token'
+    required: true
+  ORGANIZATION_NAME:
+    description: 'Organization name for your container registry'
+    required: true
+  IMAGE_NAME:
+    description: 'Name of the docker image'
+    required: true
+outputs:
+   TAG:
+     description: 'Name of the image tag'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.GH_USERNAME }}
+    - ${{ inputs.GH_PERSONAL_ACCESS_TOKEN }}
+    - ${{ inputs.ORGANIZATION_NAME }}
+    - ${{ inputs.IMAGE_NAME }}
+branding:
+  icon: 'bold'
+  color: 'blue'
