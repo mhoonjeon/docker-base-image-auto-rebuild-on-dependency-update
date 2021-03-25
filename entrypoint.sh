@@ -27,6 +27,24 @@ if [ $? -ne 0 ]; then
     docker push ${tag}
     docker tag ${tag} ${tag_latest}
     docker push ${tag_latest}
+
+    STAGE="staging"
+    staging_tag=${CI_REGISTRY_IMAGE}/django:${STAGE}-base-${poetry_lock_hash}
+    staging_tag_latest=${CI_REGISTRY_IMAGE}/django:${STAGE}-base-latest
+    # staging uses same Dockerfile as production
+    docker build -t ${staging_tag} -f compose/common/django/prod-base.Dockerfile .
+    docker push ${staging_tag}
+    docker tag ${staging_tag} ${staging_tag_latest}
+    docker push ${staging_tag_latest}
+
+    # also tag and push production as it is same as staging
+    STAGE="prod"
+    prod_tag=${CI_REGISTRY_IMAGE}/django:${STAGE}-base-${poetry_lock_hash}
+    prod_tag_latest=${CI_REGISTRY_IMAGE}/django:${STAGE}-base-latest
+    docker tag ${staging_tag_latest} ${prod_tag}
+    docker push ${prod_tag}
+    docker tag ${staging_tag_latest} ${prod_tag_latest}
+    docker push ${prod_tag_latest}
 fi
 
 echo "::set-output name=TAG::tag"
