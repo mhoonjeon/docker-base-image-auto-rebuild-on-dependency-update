@@ -23,6 +23,10 @@ I use this package for our Github organization's container registry.
 
 **Required** Name of the docker image.
 
+### `DOCKERFILE_PATH`
+
+**Required** File path for the Dockerfile
+
 ## Outputs
 
 ### `TAG`
@@ -38,4 +42,5 @@ with:
   GH_PERSONAL_ACCESS_TOKEN: '293jca0239293.....'
   ORGANIZATION_NAME: 'my_organization'
   IMAGE_NAME: 'django'
+  DOCKERFILE_PATH: 'docker/images/local/Dockerfile.base'
 ```

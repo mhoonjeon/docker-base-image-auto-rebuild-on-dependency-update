@@ -14,6 +14,9 @@ inputs:
   IMAGE_NAME:
     description: 'Name of the docker image'
     required: true
+  DOCKERFILE_PATH:
+    description: "File path for the Dockerfile"
+    required: true
 outputs:
    TAG:
      description: 'Name of the image tag'
@@ -25,6 +28,7 @@ runs:
     - ${{ inputs.GH_PERSONAL_ACCESS_TOKEN }}
     - ${{ inputs.ORGANIZATION_NAME }}
     - ${{ inputs.IMAGE_NAME }}
+    - ${{ inputs.DOCKERFILE_PATH }}
 branding:
   icon: 'bold'
   color: 'blue'
