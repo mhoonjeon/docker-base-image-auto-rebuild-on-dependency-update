@@ -7,6 +7,7 @@ GH_PERSONAL_ACCESS_TOKEN=$2
 ORGANIZATION_NAME=$3
 IMAGE_NAME=$4
 DOCKERFILE_PATH=$5
+STAGE=$6
 
 echo ${GH_PERSONAL_ACCESS_TOKEN} | docker login ghcr.io -u ${GH_USERNAME} --password-stdin
 
@@ -16,16 +17,18 @@ echo ${poetry_lock_hash}
 curl  -H "Authorization: Bearer ${GH_PERSONAL_ACCESS_TOKEN}" \
   -H "Accept: application/vnd.github.v3+json" \
   https://api.github.com/orgs/${ORGANIZATION_NAME}/packages/container/${IMAGE_NAME}/versions \
-  | jq -c -r ".[].metadata.container.tags[]" | grep -q ${poetry_lock_hash}
+  | jq -c -r ".[].metadata.container.tags[]" | grep ${STAGE} | grep -q ${poetry_lock_hash}
 
-if [ $? -ne 0 ]; then
-#if [ $? -eq 0 ]; then
+# https://www.shell-tips.com/bash/if-statement/
+# https://stackoverflow.com/questions/56170215/what-is-the-point-of-grep-q
+# https://askubuntu.com/questions/892604/what-is-the-meaning-of-exit-0-exit-1-and-exit-2-in-a-bash-script
+if [ $? -ne 0 ];
+then
     CI_REGISTRY_IMAGE="ghcr.io/${ORGANIZATION_NAME}"
-    STAGE="dev"
     tag=${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${STAGE}-base-${poetry_lock_hash}
     tag_latest=${CI_REGISTRY_IMAGE}/${IMAGE_NAME}:${STAGE}-base-latest
-    #docker build -t ${tag} -f compose/common/${IMAGE_NAME}/${STAGE}-base.Dockerfile .
-    docker build -t ${tag} -f ${DOCKERFILE_PATH} .
+    #docker build -t ${tag} -f compose/common/${IMAGE_NAME}/${STAGE}-base.Dockerfile . --no-cache
+    docker build -t ${tag} -f ${DOCKERFILE_PATH} . --no-cache
     docker push ${tag}
     docker tag ${tag} ${tag_latest}
     docker push ${tag_latest}

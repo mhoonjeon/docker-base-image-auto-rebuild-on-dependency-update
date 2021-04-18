@@ -27,6 +27,10 @@ I use this package for our Github organization's container registry.
 
 **Required** File path for the Dockerfile
 
+### `STAGE`
+
+**Required** Stage for Dockerfile. Can either be `dev` or `prod`
+
 ## Outputs
 
 ### `TAG`
@@ -43,4 +47,5 @@ with:
   ORGANIZATION_NAME: 'my_organization'
   IMAGE_NAME: 'django'
   DOCKERFILE_PATH: 'docker/images/local/Dockerfile.base'
+  STAGE: 'dev'  # or 'prod'
 ```

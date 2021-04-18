@@ -17,6 +17,9 @@ inputs:
   DOCKERFILE_PATH:
     description: "File path for the Dockerfile"
     required: true
+  STAGE:
+    description: "Can either be `dev` or `prod`"
+    required: true
 outputs:
    TAG:
      description: 'Name of the image tag'
@@ -29,6 +32,7 @@ runs:
     - ${{ inputs.ORGANIZATION_NAME }}
     - ${{ inputs.IMAGE_NAME }}
     - ${{ inputs.DOCKERFILE_PATH }}
+    - ${{ inputs.STAGE }}
 branding:
   icon: 'bold'
   color: 'blue'
