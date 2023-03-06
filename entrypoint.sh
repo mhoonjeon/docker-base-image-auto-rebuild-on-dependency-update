@@ -34,4 +34,4 @@ then
     docker push ${tag_latest}
 fi
 
-echo "::set-output name=TAG::tag"
+echo "{TAG}={tag}" >> $GITHUB_OUTPUT
